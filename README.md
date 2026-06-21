@@ -23,7 +23,85 @@
 
 ## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+This is a **CRUD API** built with **NestJS** and **Prisma** for user management. The application provides RESTful endpoints to create, read, update, and delete users, with data persisted in a **PostgreSQL** database.
+
+### Architecture
+
+- **Framework**: NestJS 11.x (TypeScript)
+- **Database**: PostgreSQL (via Prisma ORM)
+- **Modules**:
+  - `userapp/`: CRUD operations with **Prisma** (production-ready, database-backed)
+  - `users/`: CRUD operations with **in-memory storage** (for testing/demo purposes)
+  - `database/`: Prisma client configuration
+- **Validation**: `class-validator` and `class-transformer` for DTO validation
+- **Authentication**: Simple token-based guard (token: `valid-token`)
+
+### Dependencies
+
+| Dependency               | Purpose                          |
+|--------------------------|----------------------------------|
+| `@nestjs/common`         | NestJS core utilities            |
+| `@nestjs/platform-express` | Express adapter for NestJS    |
+| `@prisma/client`          | Prisma ORM client                |
+| `@prisma/adapter-pg`      | PostgreSQL adapter for Prisma    |
+| `pg`                     | PostgreSQL driver                |
+| `class-validator`         | Input validation                 |
+| `class-transformer`       | Object transformation            |
+
+### Environment Configuration
+
+To use this API, set up your PostgreSQL connection string in the `.env` file:
+
+```env
+DATABASE_URL="postgresql://USER:PASSWORD@HOST:PORT/DATABASE?sslmode=require"
+```
+
+Replace `USER`, `PASSWORD`, `HOST`, `PORT`, and `DATABASE` with your PostgreSQL credentials.
+
+### API Endpoints
+
+All endpoints are prefixed with `/api/v1`.
+
+#### Userapp Module (Database-backed)
+
+| Method | Endpoint          | Description                     | Authentication |
+|--------|-------------------|---------------------------------|----------------|
+| POST   | `/userapp`        | Create a new user               | None           |
+| GET    | `/userapp`        | Get all users (optional role filter) | None    |
+| GET    | `/userapp/:id`    | Get a user by ID                | None           |
+| PATCH  | `/userapp/:id`    | Update a user by ID             | None           |
+| DELETE | `/userapp/:id`    | Delete a user by ID             | None           |
+
+#### Users Module (In-memory)
+
+| Method | Endpoint          | Description                     | Authentication |
+|--------|-------------------|---------------------------------|----------------|
+| GET    | `/users`          | Get all users (mock data)       | Required*      |
+| GET    | `/users/:id`      | Get a user by ID (mock data)    | None           |
+| POST   | `/users`          | Create a new user (mock data)   | None           |
+| PATCH  | `/users/:id`      | Update a user (mock data)       | None           |
+| DELETE | `/users/:id`      | Delete a user (mock data)       | None           |
+
+*Authentication for `GET /users` requires a token: `Authorization: Bearer valid-token`
+
+### Request Examples
+
+**Create User (POST /userapp)**
+```json
+{
+  "name": "John Doe",
+  "email": "john@example.com",
+  "role": "USER"
+}
+```
+
+**Update User (PATCH /userapp/1)**
+```json
+{
+  "name": "John Updated",
+  "role": "ADMIN"
+}
+```
 
 ## Project setup
 
